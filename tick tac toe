@@ -1,0 +1,159 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+char array[3][3]={{'1','2','3'},{'4','5','6'},{'7','8','9'}};
+char a_name[10],b_name[10],c_name[10],*p1=0,*p2=0;
+
+char choice;
+int row,column;
+char turn;
+int draw = 0;
+void display_array();
+void player_turn();
+int gameover();
+
+int main()
+{
+    printf("\t\t\tT I C K -- T A C -- T O E -- G A M E \t\t\t");
+    printf("\n\t\t\t\t FOR 2 PLAYERS \t\t\t\t\nenter the name of the player choosing O\t");
+
+    gets(a_name);
+    printf("\nenter the name of the player choosing X\t");
+    gets(b_name);
+    here:
+    printf("\nenter the name of the player playing at first position\t");
+    gets(c_name);
+    
+    if(strcmp(a_name,c_name)==0)
+    {
+        p1=&a_name;
+        p2=&b_name;
+        turn='O';
+    }
+    else if(strcmp(c_name,b_name)==0)
+    {
+        p2=&b_name;
+        p1=&a_name;
+        turn='X';
+    }
+    else
+    {
+        printf("\nname mismatched\t\n");
+        goto here;
+    }
+    
+
+    while(gameover())
+    {
+        display_array();
+        player_turn();
+    }
+    if(turn == 'X' && draw == 0){
+        printf("\n\nCongratulations!  %s has won the game",a_name);
+    }
+    else if(turn == 'O' && draw == 0){
+        printf("\n\nCongratulations! %s has won the game",b_name);
+    }
+    else
+    printf("\n\nGAME DRAW!!!\n\n");
+}
+
+void player_turn()
+{
+    if(turn=='X')
+    printf("\n\t\t %s turn ",p2);
+    if(turn=='O')
+    printf("\n\t\t %s turn ",p1);
+
+fflush(stdout);fflush(stdin);
+
+    scanf("%c",&choice);
+    while((choice<='0' || choice>='9'))
+    {
+    printf("wrong entry\n");
+    fflush(stdin);
+    scanf("%c",&choice);
+    
+    }
+    printf("%d",choice);
+     switch(choice){
+        case '1': row=0; column=0; break;
+        case '2': row=0; column=1; break;
+        case '3': row=0; column=2; break;
+        case '4': row=1; column=0; break;
+        case '5': row=1; column=1; break;
+        case '6': row=1; column=2; break;
+        case '7': row=2; column=0; break;
+        case '8': row=2; column=1; break;
+        case '9': row=2; column=2; break;
+    }
+
+    if(turn == 'X' && array[row][column] != 'X' && array[row][column] != 'O'){
+    
+        array[row][column] = 'X';
+        turn = 'O';
+        display_array();fflush(stdout);fflush(stdin);
+
+    }
+    else if(turn == 'O' && array[row][column] != 'X' && array[row][column] != 'O'){
+    
+        array[row][column] = 'O';
+        turn = 'X';
+        display_array();fflush(stdout);fflush(stdin);
+    }
+    else {
+        
+        printf("Box already filled!n Please choose another!!");
+        // printf("Entered........!!");
+        
+    }
+    
+fflush(stdout);fflush(stdin);
+
+
+}
+
+
+void display_array(){
+
+    fflush(stdout);fflush(stdin);
+    printf("%s [X]\t\t%s[0]\n\n",b_name,a_name);
+    printf("\t\t     |      |     \n");
+    printf("\t\t     |      |     \n");
+    printf("\t\t  %c  |  %c   |  %c \n",array[0][0],array[0][1],array[0][2]);
+    
+
+    printf("\t\t_____|______|______\n");
+    printf("\t\t     |      |     \n");
+    printf("\t\t  %c  |  %c   |  %c \n",array[1][0],array[1][1],array[1][2]);
+    
+
+    printf("\t\t_____|______|______\n");
+    printf("\t\t     |      |     \n");
+    printf("\t\t  %c  |  %c   |  %c \n",array[2][0],array[2][1],array[2][2]);
+    printf("\t\t     |      |     \n");
+    fflush(stdout);fflush(stdin);
+}
+
+
+int gameover()
+{
+    fflush(stdout);fflush(stdin);
+    for(int i=0; i<3; i++)
+    if(array[i][0] == array[i][1] && array[i][0] == array[i][2] || array[0][i] == array[1][i] && array[0][i] == array[2][i])
+    return 0;
+
+     if(array[0][0] == array[1][1] && array[0][0] == array[2][2] || array[0][2] == array[1][1] && array[0][2] == array[2][0])
+    return 0;
+
+    for(int i=0; i<3; i++)
+    for(int j=0; j<3; j++)
+    if(array[i][j] != 'X' && array[i][j] != 'O')
+    return 1;
+
+     draw = 1;
+     fflush(stdout);fflush(stdin);
+    return 0;
+
+}
